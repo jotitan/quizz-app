@@ -1,0 +1,6 @@
+.player {
+    padding:5px 20px;
+    border:dashed 1px grey;
+    background-color:lightskyblue;
+    margin-left:10px;
+}

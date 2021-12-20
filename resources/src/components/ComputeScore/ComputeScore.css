@@ -1,0 +1,18 @@
+.good-answer {
+    border: dashed 2px lightblue;
+    display: inline-block;
+    padding: 20px;
+    font-size: 24px;
+}
+
+.good-answer > span {
+    font-weight:bold;
+}
+
+.good-player {
+    padding:10px 30px;
+    border:dashed 1px grey;
+    background-color:lightskyblue;
+    margin-left:20px;
+    font-size:24px;
+}

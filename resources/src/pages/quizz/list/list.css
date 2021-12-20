@@ -1,0 +1,9 @@
+.icon-action {
+    font-size:20px;
+    padding:0px 20px;
+    color:green !important;
+}
+
+.icon-action:hover {
+    color: #0062d3 !important;
+}

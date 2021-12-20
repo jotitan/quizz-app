@@ -1,0 +1,10 @@
+.button-action {
+    font-size:24px;
+    padding-left:5px;
+}
+
+.question-label {
+    font-weight:bold;
+    margin-top:10px;
+    text-transform: capitalize;
+}

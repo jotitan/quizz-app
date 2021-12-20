@@ -1,0 +1,25 @@
+.score-player {
+    font-size: 20px;
+}
+
+.top3 {
+    font-weight: bold;
+    font-size: 30px;
+    color:dimgrey;
+}
+
+div.group-top-3 {
+    border:dashed 2px lightskyblue;
+    width:50vw;
+    margin: auto auto 35px;
+}
+
+.rank {
+    font-size: 24px;
+    font-weight:bold;
+}
+
+.winner {
+    color: #0094d0;
+    font-size:40px;
+}
