@@ -9,7 +9,6 @@ import (
 	"github.com/quizz-app/music"
 	"github.com/quizz-app/persistence"
 	"io"
-	"io/fs"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -42,7 +41,7 @@ func (qi quizzesInfo)save()error{
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(qi.path,data,fs.ModePerm)
+	return ioutil.WriteFile(qi.path,data,777)
 }
 
 func (qi quizzesInfo) deleteQuizz(id string) error {
