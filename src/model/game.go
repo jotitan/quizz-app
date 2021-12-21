@@ -136,10 +136,10 @@ func (g *Game)ConnectPlayer(name string,communicate sse.SSECommunicate){
 	g.byNames[name].messages = communicate.Chanel
 }
 
-func (g *Game)SendScoreToPlayer(){
+func (g *Game)SendScoreToPlayer(isFinish bool){
 	for _,player := range g.players {
 		if player.connected {
-			payload := fmt.Sprintf("{\"rank\":%d,\"score\":%d,\"fine\":%d}",player.rank,player.score, player.fineScore)
+			payload := fmt.Sprintf("{\"rank\":%d,\"score\":%d,\"fine\":%d,\"end\":%t}",player.rank,player.score, player.fineScore,isFinish)
 			player.messages<-sse.Message{Event: "score",Payload: payload}
 		}
 	}
@@ -247,7 +247,8 @@ func (g *Game)ComputeScore()ScoreQuestion{
 	}
 	g.currentAnswers.reset()
 	g.computePlayersRank()
-	g.SendScoreToPlayer()
+	g.SendScoreToPlayer(len(g.Quizz.Questions) == g.currentQuestion)
+	// If last question, notify user
 	return results
 }
 

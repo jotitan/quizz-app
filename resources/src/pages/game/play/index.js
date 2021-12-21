@@ -1,5 +1,4 @@
-import React from 'react';
-import  {useContext, useEffect, useState} from 'react';
+import  React,{useContext, useEffect, useState} from 'react';
 import {useParams, useSearchParams} from "react-router-dom";
 import GameContext from "../../../context/GameContext";
 import PlayerAnswer from "../../../components/PlayerAnswer";
@@ -20,8 +19,12 @@ export default function PlayGame(){
             switch(data.status){
                 case 'waiting':setStatus('waiting');break;
                 case 'score':
-                    setScore({score:data.score,rank:data.rank})
-                    setStatus('waiting');
+                    setScore({score:data.score,rank:data.rank,end:data.end})
+                    if(data.end){
+                        setStatus('end_game')
+                    }else {
+                        setStatus('waiting');
+                    }
                     break;
                 case 'question':
                     setQuestion(data.question);
@@ -40,6 +43,13 @@ export default function PlayGame(){
         })
     }
 
+    const showEnd = ()=> {
+        return <div style={{textAlign:'center',fontSize:24}}>
+            <div>Fin de partie</div>
+            <div style={{fontWeight:'bold',marginTop:20}}>{score.rank === 0 ? 'Bravo, tu as gagné le quizz':''}</div>
+        </div>
+    }
+
     useEffect(()=>{
         createSSEConnection()
         // eslint-disable-next-line
@@ -50,6 +60,7 @@ export default function PlayGame(){
             case "connecting":return "En attente de connexion";
             case "waiting":return "Vous êtes connecté, en attente de démarrage";
             case "answer_done":return "Réponse envoyée, en attente...";
+            case "end_game":return showEnd();
             case "answer":return <PlayerAnswer question={question} gameId={params.id_game} playerId={params.id_player} setStatus={setStatus}/>
             default:return ""
         }

@@ -3,11 +3,12 @@ import GameContext from "../../../context/GameContext";
 import {Input, notification} from "antd";
 import RoundButton from "../../../components/RoundButton";
 import './join.css';
+import {useSearchParams} from "react-router-dom";
 
 export default function JoinGame(){
-
+    const [query] = useSearchParams();
     const [name,setName] = useState('');
-    const [game,setGame] = useState('');
+    const [game,setGame] = useState(query.get("game") || '');
     const {joinGame} = useContext(GameContext)
 
     const connect = ()=>joinGame(game,name)

@@ -17,6 +17,9 @@ function getScore(id,secureId){
 }
 
 function joinGame(id,name){
+    if(id === '' || name === ''){
+        return Promise.reject("Need to specify game and name to connect")
+    }
     return fetch(`${getBase()}/player/join/${id}?name=${name}`,{method:'POST'}).then(d=>{
         return d.status === 400 ?
             new Promise((_,r)=>d.text().then(err=>r(err))):d.json()

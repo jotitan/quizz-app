@@ -126,12 +126,11 @@ func (ps GameService)definePlayerStatusGame(game *model.Game, login string)strin
 		if game.HasPlayerAnswered(login) {
 			return "{\"status\":\"waiting\"}"
 		}
-
 		q,_ := game.PreviousQuestion()
 		return fmt.Sprintf("{\"status\":\"question\",%s,\"question\":{\"title\":\"%s\",\"nb\":%d,\"position\":%d}}",
 			getScoreAsString(game,login),q.Title,len(q.Answers),q.Position)
 	}
-	return fmt.Sprintf("{\"status\":\"score\",%s}",getScoreAsString(game,login))
+	return fmt.Sprintf("{\"status\":\"score\",%s,\"end\":%t}",getScoreAsString(game,login),len(game.Quizz.Questions) == game.GetCurrentQuestion())
 }
 
 func getScoreAsString(game *model.Game,login string)string{
