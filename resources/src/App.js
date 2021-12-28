@@ -1,7 +1,6 @@
 import React from "react";
 import './App.css';
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import Home from "./pages/home";
 import ListQuizzes from "./pages/quizz/list";
 import ShowQuizz from "./pages/quizz/show";
 import CreateQuizz from "./pages/quizz/create";
@@ -30,7 +29,7 @@ function App() {
         getMusic:GameApi.getMusic,
     }
     const quizzApi = {
-        createQuizz:QuizzApi.createQuizz,
+        createOrUpdateQuizz:QuizzApi.createOrUpdateQuizz,
         getQuizz:QuizzApi.getQuizz,
         addQuestion:QuizzApi.addQuestion,
         getQuizzes:QuizzApi.getQuizzes,
@@ -44,7 +43,7 @@ function App() {
             <GameContext.Provider value={gameApi}>
                 <Router >
                     <Routes>
-                        <Route path="/"  element={<Home/>}/>
+                        <Route path="/"  element={<ListQuizzes/>}/>
                         <Route path="/quizz/create" element={<CreateQuizz/>}/>
                         <Route path="/quizz/:id" element={<ShowQuizz/>}/>
                         <Route path="/quizzes"  element={<ListQuizzes/>}/>

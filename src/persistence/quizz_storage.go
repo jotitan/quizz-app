@@ -8,8 +8,10 @@ import (
 // Store each quizz in filer for now
 
 type QuizzStorage interface {
-	Create(name string)(string,error)
+	Create(dto model.QuizzDto)(string,error)
+	Update(id string, dto model.QuizzDto) (string, error)
 	Get(id string)(model.Quizz,error)
+	GetCover(quizz model.Quizz)(io.ReadCloser,error)
 	AddQuestion(id string, question model.Question)error
 	GetAll() []model.LightQuizz
 	DeleteQuestion(quizz model.Quizz,questionId string)error

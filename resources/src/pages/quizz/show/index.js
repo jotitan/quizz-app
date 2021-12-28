@@ -2,12 +2,13 @@ import React, {useContext, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import QuizzContext from "../../../context/QuizzContext";
 import {Divider, Modal, notification, Popconfirm, Space, Tooltip} from 'antd';
-import {DeleteTwoTone, EditTwoTone, PlusCircleTwoTone} from '@ant-design/icons';
+import {DeleteOutlined, DeleteTwoTone, EditOutlined, EditTwoTone, PlusCircleTwoTone} from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import './show.css';
 import '../../../App.css';
 import EditQuestion from "../../../components/EditQuestion";
 import RoundButton from "../../../components/RoundButton";
+import EditQuizz from "../../../components/EditQuizz";
 
 
 export default function ShowQuizz(){
@@ -15,8 +16,10 @@ export default function ShowQuizz(){
     let [quizz,setQuizz] = useState({});
     let [refresh,setRefresh] = useState(false);
     let [showEditQuestion,setShowEditQuestion] = useState(false);
+    let [saveEditQuizz,setSaveEditQuizz] = useState(false);
+    let [showEditQuizz,setShowEditQuizz] = useState(false);
     const [editingQuestion,setEditingQuestion] = useState({});
-    const {getQuizz,addQuestion,deleteQuestion} = useContext(QuizzContext)
+    const {getQuizz,addQuestion,deleteQuestion,deleteQuizz} = useContext(QuizzContext)
     useEffect(()=>getQuizz(id).then(setQuizz),[getQuizz,setQuizz,refresh,id])
 
     const editQuestion = q => {
@@ -77,10 +80,25 @@ export default function ShowQuizz(){
         :''
     }
 
+    const doDeleteQuizz = id => {
+        deleteQuizz(id).then(()=>{
+            notification["success"]({message:"Quizz supprimé"})
+            window.location.href='/';
+        })
+    }
+
     return (<div>
         <div style={{paddingLeft:50}}>
             {quizz.id != null ? <div>
-                <h1>Quizz {quizz.name}</h1>
+                <h1>
+                    Quizz {quizz.name}
+                    <EditOutlined onClick={()=>setShowEditQuizz(true)} style={{marginLeft:10,marginRight:10}}/>
+                    <Popconfirm okText={"Supprimer"} cancelText={"Annuler"} onConfirm={()=>doDeleteQuizz(quizz.id)} title={"Etes vous sur de vouloir supprimer ce quizz"}>
+                        <Tooltip title={"Supprimer"}>
+                            <DeleteOutlined/>
+                        </Tooltip>
+                    </Popconfirm>
+                </h1>
                 {quizz.description}
 
                 <Divider orientation={"left"}>
@@ -104,6 +122,12 @@ export default function ShowQuizz(){
             {editingQuestion == null || editingQuestion.id == null ? '':
                 < EditQuestion question = {editingQuestion} updateQuestion={setEditingQuestion}/>
             }
+        </Modal>
+        <Modal title={"Edit quizz"} visible={showEditQuizz}
+               className={"modal-question"}
+               onOk={()=>setSaveEditQuizz(true)} onCancel={()=>setShowEditQuizz(false)}
+               okText={"Sauvegarder"} cancelText={"Annuler"}>
+            <EditQuizz quizz={quizz} runEdit={saveEditQuizz}/>
         </Modal>
     </div>)
 }

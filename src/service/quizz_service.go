@@ -36,12 +36,14 @@ func (qd QuestionDto)toQuestion()model.Question{
 	return model.Question{Id:qd.Id,Title: qd.Title,Answers: qd.Answers,MaxTime: qd.MaxTime,Position: qd.Position}
 }
 
-//@return a unique id
-func (gs QuizzService)Create(name string)(string,error){
-	if strings.EqualFold("",name) {
+func (gs QuizzService) Update(id string,quizz model.QuizzDto) (string,error) {
+	if strings.EqualFold("",quizz.Name) {
 		return "",errors.New("Missing name field")
 	}
-	return gs.storage.Create(name)
+	if strings.EqualFold("",id) {
+		return gs.storage.Create(quizz)
+	}
+	return gs.storage.Update(id,quizz)
 }
 
 func (gs QuizzService)GetAll()[]model.LightQuizz {
@@ -101,6 +103,17 @@ func (gs QuizzService) DeleteQuestion(quizz model.Quizz,questionId string) {
 
 func (gs QuizzService) ReadMusic(quizz model.Quizz,questionId string, writer io.Writer) error{
 	return gs.storage.ReadMusic(quizz,questionId,writer)
+}
+
+func (gs QuizzService) GetCover(quizz model.Quizz,writer io.Writer)error{
+	reader, err := gs.storage.GetCover(quizz)
+	if err != nil {
+		return err
+	}
+	if _,err := io.Copy(writer,reader) ; err != nil {
+		return err
+	}
+	return reader.Close()
 }
 
 func NewQuizzService(conf config.Config) QuizzService {

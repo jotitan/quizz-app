@@ -74,10 +74,79 @@ func (fgs filerQuizzStorage) Get(id string) (model.Quizz, error) {
 	return fgs.getByFile(fgs.generatePath(id))
 }
 
-func (fgs filerQuizzStorage) Create(name string) (string, error) {
+func (fgs filerQuizzStorage) Create(dto model.QuizzDto) (string, error) {
 	// Create quizz in a specific json file
 	id := generateUniqueId()
-	quizz := model.Quizz{Id: id,Name:name,Questions: []model.Question{}}
+	quizz := model.Quizz{Id: id,Name:dto.Name,Description:dto.Description,Questions: []model.Question{}}
+	if err := fgs.addImageQuizz(dto,&quizz) ; err != nil {
+		return "",err
+	}
+	return id,fgs.save(quizz)
+}
+
+func (fgs filerQuizzStorage) removeImageQuizz(quizz *model.Quizz)  error {
+	if quizz.Image {
+		path,err := fgs.generateImagePath(*quizz)
+		if err != nil{
+			return err
+		}
+		err = os.Remove(path)
+		if err != nil{
+			return err
+		}
+		quizz.Image = false
+	}
+	return nil
+}
+
+func (fgs filerQuizzStorage) GetCover(quizz model.Quizz) (io.ReadCloser, error) {
+	if !quizz.Image {
+		return nil,errors.New("no image")
+	}
+	path,err := fgs.generateImagePath(quizz)
+	if err != nil {
+		return nil,err
+	}
+	return os.Open(path)
+}
+
+func (fgs filerQuizzStorage) addImageQuizz(dto model.QuizzDto,quizz *model.Quizz)  error {
+	if dto.ImageDescriptionHeader != nil {
+		if !strings.HasSuffix(dto.ImageDescriptionHeader.Filename,".jpeg") && !strings.HasSuffix(dto.ImageDescriptionHeader.Filename,".jpg") {
+			return errors.New("image must be jpeg")
+		}
+		path,err := fgs.generateImagePath(*quizz)
+		if err != nil {
+			return err
+		}
+		img,err := os.OpenFile(path,os.O_CREATE|os.O_TRUNC,os.ModePerm)
+		if err != nil {
+			return err
+		}
+		defer img.Close()
+		if _,err = io.Copy(img,dto.ImageDescription) ; err != nil {
+			return err
+		}
+		quizz.Image = true
+	}
+	return nil
+}
+
+func (fgs filerQuizzStorage) Update(id string, dto model.QuizzDto) (string, error) {
+	quizz,err := fgs.Get(id)
+	if err != nil {
+		return "",err
+	}
+	quizz.Name = dto.Name
+	quizz.Description = dto.Description
+	if dto.RemoveImage {
+		if err := fgs.removeImageQuizz(&quizz) ; err != nil {
+			return "",err
+		}
+	}
+	if err := fgs.addImageQuizz(dto,&quizz) ; err != nil {
+		return "",err
+	}
 	return id,fgs.save(quizz)
 }
 
@@ -184,6 +253,14 @@ func (fgs filerQuizzStorage)generateMusicPath(quizz model.Quizz)(string,error){
 		return "",err
 	}
 	return filepath.Join(folder,fmt.Sprintf("%s.mp3",generateUniqueIdAsString())),nil
+}
+
+func (fgs filerQuizzStorage)generateImagePath(quizz model.Quizz)(string,error){
+	folder := filepath.Join(fgs.filer,"assets",quizz.Id)
+	if err := os.MkdirAll(folder,os.ModePerm) ; err != nil {
+		return "",err
+	}
+	return filepath.Join(folder,fmt.Sprintf("cover_%s.jpeg",quizz.Id)),nil
 }
 
 func generateUniqueIdAsString()string{

@@ -8,8 +8,17 @@ function getQuizzes(){
     return fetch(`${getBase()}/quizzes`).then(d=>d.json())
 }
 
-function createQuizz(name,description){
-    return fetch(`${getBase()}/quizz?name=${name}&description=${description}`,{method:'POST'}).then(d=>d.json())
+function createOrUpdateQuizz(name,description,id,image,removeImage){
+    const form = new FormData();
+    const payload = {name:name,description:description};
+    if(removeImage){
+        payload.removeImage = true;
+    }
+    form.append("quizz",JSON.stringify(payload))
+    if(image != null){
+        form.append("image",image.originFileObj);
+    }
+    return fetch(`${getBase()}/quizz${id != null ? `/${id}`:''}`,{method:'POST',body:form}).then(d=>d.json())
 }
 
 function addQuestion(id,question){
@@ -51,7 +60,7 @@ function deleteQuizz(quizzId){
 const quizzApi = {
     getQuizz,
     getQuizzes,
-    createQuizz,
+    createOrUpdateQuizz,
     addQuestion,
     deleteQuestion,
     deleteQuizz,

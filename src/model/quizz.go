@@ -3,12 +3,23 @@ package model
 import (
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"strconv"
 	"strings"
 )
 
+type QuizzDto struct {
+	Name string `json:"name"`
+	Description string `json:"description"`
+	RemoveImage bool `json:"removeImage"`
+	ImageDescription multipart.File
+	ImageDescriptionHeader *multipart.FileHeader
+}
+
 type Quizz struct {
 	Name string `json:"name"`
+	Description string `json:"description"`
+	Image bool `json:"image"`
 	Id string `json:"id"`
 	Questions []Question `json:"questions"`
 }
@@ -43,6 +54,8 @@ func (q Quizz)GetNextId()string{
 
 type LightQuizz struct {
 	Name string `json:"name"`
+	Description string `json:"description"`
+	Image bool `json:"img"`
 	Id string `json:"id"`
 	Nb int `json:"nb"`
 }
@@ -50,7 +63,9 @@ type LightQuizz struct {
 func NewLightQuizz(quizz Quizz)*LightQuizz{
 	return &LightQuizz{
 		Id:quizz.Id,
+		Description: quizz.Description,
 		Name:quizz.Name,
+		Image:quizz.Image,
 		Nb:len(quizz.Questions),
 	}
 }

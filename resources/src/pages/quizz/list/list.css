@@ -7,3 +7,27 @@
 .icon-action:hover {
     color: #0062d3 !important;
 }
+
+.quizz-card {
+    width: 300px;
+    height:200px;
+    margin-left:20px !important;
+}
+
+.ant-card.ant-card-bordered {
+    display:inline-grid;
+}
+
+.card-image .ant-card-body {
+    padding:0px;
+}
+
+.card-image .ant-card-body p.description {
+    padding:24px;
+}
+.card-image .ant-card-body p.description > span {
+    background-color: rgba(0,0,0,0.7);
+    color:white;
+    padding:3px;
+    opacity: 0.9;
+}

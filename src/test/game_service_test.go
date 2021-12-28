@@ -16,7 +16,7 @@ var gameService = service.NewGameService(quizzService)
 
 
 func TestCreateGame(t *testing.T) {
-	id,_ := quizzService.Create("test game")
+	id,_ := quizzService.Update("","test game","description")
 	game,err := gameService.Create(id)
 	if err != nil {
 		t.Error("Impossible to create game",err)
@@ -31,7 +31,7 @@ func TestCreateGame(t *testing.T) {
 }
 
 func TestConnectGame(t *testing.T) {
-	id,_ := quizzService.Create("test game2")
+	id,_ := quizzService.Update("","test game2","description 2")
 	game,_ := gameService.Create(id)
 	id,err := gameService.Join(game,"super")
 	if err != nil {

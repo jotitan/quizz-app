@@ -17,7 +17,7 @@ func (fgs logQuizzStorage) Get(id string) (model.Quizz, error) {
 	return model.Quizz{},nil
 }
 
-func (fgs logQuizzStorage) Create(name string) (string, error) {
+func (fgs logQuizzStorage) Create(quizz model.QuizzDto) (string, error) {
 	logger.GetLogger2().Info("create")
 	return "",nil
 }
@@ -48,6 +48,14 @@ func (fgs logQuizzStorage) DeleteMusic(idQuizz, idQuestion string) error {
 }
 
 func (fgs logQuizzStorage) DeleteQuizz(quizz model.Quizz) error {
+	panic("implement me")
+}
+
+func (fgs logQuizzStorage) Update(id string, quizz model.QuizzDto) (string, error) {
+	panic("implement me")
+}
+
+func (fgs logQuizzStorage) GetCover(quizz model.Quizz) (io.ReadCloser, error) {
 	panic("implement me")
 }
 
