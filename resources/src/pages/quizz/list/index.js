@@ -25,6 +25,7 @@ export default function ListQuizzes(){
     const showQuizz = quizz => {
         return <Card title={<a href={`/quizz/${quizz.id}`}>{quizz.name} ({quizz.nb})</a>}
                      key={`div_${quizz.id}`}
+                     headStyle={{height:40}}
                      className={`quizz-card ${quizz.img?'card-image':''}`}
                      extra={<Tooltip title={"Jouer"}>
                          <ThunderboltOutlined className={"icon-action"} onClick={()=>window.location.href = `/game/host/${quizz.id}`}/>

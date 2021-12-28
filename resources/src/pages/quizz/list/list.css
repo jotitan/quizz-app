@@ -18,6 +18,14 @@
     display:inline-grid;
 }
 
+.ant-card-head {
+    padding:0px 0px 0px 20px !important;
+}
+
+.ant-card-extra .icon-action {
+    padding:0px 10px !important;
+}
+
 .card-image .ant-card-body {
     padding:0px;
 }

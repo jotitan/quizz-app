@@ -57,7 +57,7 @@ export default function EditQuizz({quizz,runEdit = false}){
                 Titre
             </div>
             <div className={"field"}>
-                <Input value={title} onChange={e=>setTitle(e.target.value)}/>
+                <Input value={title} onChange={e=>setTitle(e.target.value)} maxLength={26}/>
             </div>
             <div>Description</div>
             <div className={"field"}>
