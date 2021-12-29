@@ -119,7 +119,7 @@ func (fgs filerQuizzStorage) addImageQuizz(dto model.QuizzDto,quizz *model.Quizz
 		if err != nil {
 			return err
 		}
-		img,err := os.OpenFile(path,os.O_CREATE|os.O_TRUNC,os.ModePerm)
+		img,err := os.OpenFile(path,os.O_CREATE|os.O_TRUNC|os.O_RDWR,os.ModePerm)
 		if err != nil {
 			return err
 		}

@@ -32,7 +32,6 @@ export default function EditQuizz({quizz,runEdit = false}){
 
     const loadIllustration = e => {
         if(e.file.status === 'done'){
-            console.log("load file",e.file)
             setImage(e.file)
         }
     }
@@ -69,7 +68,6 @@ export default function EditQuizz({quizz,runEdit = false}){
                         maxCount={1}
                         listType="picture"
                         itemRender = {() => {
-                            console.log("GOT",image)
                             if(image != null){
                                 return <p>
                                     <img src={image.thumbUrl} height={100} alt={'preview'}/>
