@@ -1,5 +1,5 @@
 
-export default function getBase(){
+export function getBase(){
     if(window.document.location.origin.indexOf("localhost")!==-1) {
         return 'http://localhost:9001/api'
     }
@@ -12,3 +12,5 @@ export function getBaseFront(){
     }
     return "/quizz_app";
 }
+
+export default function httpHelper(){}

@@ -9,7 +9,7 @@ import '../../../App.css';
 import EditQuestion from "../../../components/EditQuestion";
 import RoundButton from "../../../components/RoundButton";
 import EditQuizz from "../../../components/EditQuizz";
-import getBaseFront from "../../../services/httpHelper";
+import {getBaseFront} from "../../../services/httpHelper";
 
 
 export default function ShowQuizz(){

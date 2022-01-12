@@ -4,8 +4,7 @@ import './EditQuizz.css';
 import {Button, Input, notification, Upload} from "antd";
 import QuizzContext from "../../context/QuizzContext";
 import {DeleteOutlined} from "@ant-design/icons";
-import getBase from "../../services/httpHelper";
-import getBaseFront from "../../services/httpHelper";
+import {getBaseFront,getBase} from "../../services/httpHelper";
 
 export default function EditQuizz({quizz,runEdit = false}){
     const {createOrUpdateQuizz} = useContext(QuizzContext)

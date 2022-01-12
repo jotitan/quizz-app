@@ -10,7 +10,7 @@ import RoundButton from "../../../components/RoundButton";
 import ShowQuestion from "../../../components/ShowQuestion";
 import ComputeScore from "../../../components/ComputeScore";
 import QRCode from 'qrcode.react';
-import getBaseFront from "../../../services/httpHelper";
+import {getBaseFront} from "../../../services/httpHelper";
 
 const getInitStatus = (id,idGame,idSecure) => {
     if(id !=null){

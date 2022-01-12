@@ -1,4 +1,4 @@
-import getBase from './httpHelper'
+import {getBase} from './httpHelper'
 
 function getQuizz(id){
     return fetch(`${getBase()}/quizz/${id}`).then(d=>d.json())

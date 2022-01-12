@@ -1,7 +1,7 @@
 import React from 'react';
 import {PageHeader} from "antd";
 import './Header.css';
-import getBaseFront from "../../services/httpHelper";
+import {getBaseFront} from "../../services/httpHelper";
 
 const isHome = ()=> window.location.pathname === '/';
 

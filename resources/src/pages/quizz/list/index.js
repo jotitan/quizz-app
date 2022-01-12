@@ -4,8 +4,7 @@ import {Card, Tooltip} from "antd";
 import {ThunderboltOutlined} from "@ant-design/icons";
 import './list.css';
 import RoundButton from "../../../components/RoundButton";
-import getBase from "../../../services/httpHelper";
-import getBaseFront from "../../../services/httpHelper";
+import {getBaseFront,getBase} from "../../../services/httpHelper";
 
 export default function ListQuizzes(){
     const [quizzes,setQuizzes] = useState([]);

@@ -4,7 +4,7 @@ import {Input, notification} from "antd";
 import RoundButton from "../../../components/RoundButton";
 import './join.css';
 import {useSearchParams} from "react-router-dom";
-import getBaseFront from "../../../services/httpHelper";
+import {getBaseFront} from "../../../services/httpHelper";
 
 export default function JoinGame(){
     const [query] = useSearchParams();

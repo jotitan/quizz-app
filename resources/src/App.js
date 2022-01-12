@@ -12,7 +12,7 @@ import HostGame from "./pages/game/host";
 import JoinGame from "./pages/game/join";
 import PlayGame from "./pages/game/play";
 import Header from "./components/Header";
-import getBaseFront from "./services/httpHelper";
+import {getBaseFront} from "./services/httpHelper";
 
 function App() {
     const gameApi = {
