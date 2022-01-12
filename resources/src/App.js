@@ -41,7 +41,7 @@ function App() {
         <div>
             <QuizzContext.Provider value={quizzApi}>
             <GameContext.Provider value={gameApi}>
-                <Router >
+                <Router basename={"quizz_app"}>
                     <Routes>
                         <Route path="/"  element={<ListQuizzes/>}/>
                         <Route path="/quizz/create" element={<CreateQuizz/>}/>

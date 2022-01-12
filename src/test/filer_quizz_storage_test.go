@@ -17,9 +17,9 @@ func TestRand(t *testing.T){
 }
 
 func TestCreateQuizz(t *testing.T){
-	storage := filer.NewQuizzStorage(tempDir)
+	storage := filer.NewQuizzStorage(tempDir,"")
 
-	id,err := storage.Create("test")
+	id,err := storage.Create(model.QuizzDto{Name:"test"})
 	if err != nil {
 		t.Error("No error possible",err)
 		return
@@ -34,9 +34,9 @@ func TestCreateQuizz(t *testing.T){
 }
 
 func TestGetQuizz(t *testing.T){
-	storage := filer.NewQuizzStorage(tempDir)
+	storage := filer.NewQuizzStorage(tempDir,"")
 
-	id,_ := storage.Create("test2")
+	id,_ := storage.Create(model.QuizzDto{Name:"test2"})
 	quizz,err := storage.Get(id)
 	if err != nil {
 		t.Error("Impossible to get quizz",err)
@@ -54,11 +54,11 @@ func TestGetQuizz(t *testing.T){
 }
 
 func TestAddQuestion(t *testing.T){
-	storage := filer.NewQuizzStorage(tempDir)
-	id,_ := storage.Create("test-with-question")
+	storage := filer.NewQuizzStorage(tempDir,"")
+	id,_ := storage.Create(model.QuizzDto{Name:"test-with-question"})
 	err := storage.AddQuestion(id,model.Question{Title:"New question",Answers:[]model.Answer{{Text: "First response",Good:true},{Text: "Bad response"},{Text: "Second bad"}}})
 	if err != nil {
-		t.Error("No error can appear")
+		t.Error("No error can appear",err)
 	}
 	quizz,_ := storage.Get(id)
 	if size := len(quizz.Questions) ; size != 1 {
@@ -68,8 +68,8 @@ func TestAddQuestion(t *testing.T){
 }
 
 func TestRemoveQuestion(t *testing.T) {
-	storage := filer.NewQuizzStorage(tempDir)
-	id, _ := storage.Create("test-with-question2")
+	storage := filer.NewQuizzStorage(tempDir,"")
+	id, _ := storage.Create(model.QuizzDto{Name:"test-with-question2"})
 	storage.AddQuestion(id, model.Question{Title: "New question", Answers: []model.Answer{}})
 	storage.AddQuestion(id, model.Question{Title: "New question2", Answers: []model.Answer{}})
 	storage.AddQuestion(id, model.Question{Title: "New question3", Answers: []model.Answer{}})

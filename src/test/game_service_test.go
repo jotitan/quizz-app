@@ -2,6 +2,7 @@ package test
 
 import (
 	"github.com/quizz-app/config"
+	"github.com/quizz-app/model"
 	"github.com/quizz-app/service"
 	"os"
 	"strings"
@@ -16,7 +17,7 @@ var gameService = service.NewGameService(quizzService)
 
 
 func TestCreateGame(t *testing.T) {
-	id,_ := quizzService.Update("","test game","description")
+	id,_ := quizzService.Update("",model.QuizzDto{Name:"test game",Description: "description"})
 	game,err := gameService.Create(id)
 	if err != nil {
 		t.Error("Impossible to create game",err)
@@ -31,7 +32,7 @@ func TestCreateGame(t *testing.T) {
 }
 
 func TestConnectGame(t *testing.T) {
-	id,_ := quizzService.Update("","test game2","description 2")
+	id,_ := quizzService.Update("",model.QuizzDto{Name:"test game2",Description: "description 2"})
 	game,_ := gameService.Create(id)
 	id,err := gameService.Join(game,"super")
 	if err != nil {
