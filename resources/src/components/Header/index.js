@@ -1,6 +1,7 @@
 import React from 'react';
 import {PageHeader} from "antd";
 import './Header.css';
+import getBaseFront from "../../services/httpHelper";
 
 const isHome = ()=> window.location.pathname === '/';
 
@@ -14,7 +15,7 @@ export default function Header({children}){
     return <div>
         {showHeader()?
             isHome() ? <PageHeader title={"Quizz app"} className="site-page-header"/>:
-                    <PageHeader title={"Quizz app"} className="site-page-header" onBack={()=>window.location.href='/'}/>
+                    <PageHeader title={"Quizz app"} className="site-page-header" onBack={()=>window.location.href=`${getBaseFront()}/`}/>
 
             :''}
         {children}

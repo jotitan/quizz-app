@@ -9,6 +9,7 @@ import '../../../App.css';
 import EditQuestion from "../../../components/EditQuestion";
 import RoundButton from "../../../components/RoundButton";
 import EditQuizz from "../../../components/EditQuizz";
+import getBaseFront from "../../../services/httpHelper";
 
 
 export default function ShowQuizz(){
@@ -76,14 +77,14 @@ export default function ShowQuizz(){
 
     const showPlayButton = () => {
         return isQuizzPlayable() ?
-            <RoundButton title={"Jouer"} action={()=>window.location.href=`/game/host/${quizz.id}`}/>
+            <RoundButton title={"Jouer"} action={()=>window.location.href=`${getBaseFront()}/game/host/${quizz.id}`}/>
         :''
     }
 
     const doDeleteQuizz = id => {
         deleteQuizz(id).then(()=>{
             notification["success"]({message:"Quizz supprimé"})
-            window.location.href='/';
+            window.location.href=`${getBaseFront()}/`;
         })
     }
 

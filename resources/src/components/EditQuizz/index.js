@@ -5,6 +5,7 @@ import {Button, Input, notification, Upload} from "antd";
 import QuizzContext from "../../context/QuizzContext";
 import {DeleteOutlined} from "@ant-design/icons";
 import getBase from "../../services/httpHelper";
+import getBaseFront from "../../services/httpHelper";
 
 export default function EditQuizz({quizz,runEdit = false}){
     const {createOrUpdateQuizz} = useContext(QuizzContext)
@@ -18,7 +19,7 @@ export default function EditQuizz({quizz,runEdit = false}){
         createOrUpdateQuizz(title,description,quizz.id,image,removeImage)
             .then(d=>{
                 notification['success']({message:`Quizz ${quizz.id == null ? 'created':'updated'}`})
-                window.location.href=`/quizz/${d.id}`;
+                window.location.href=`${getBaseFront()}/quizz/${d.id}`;
             })
             .catch(()=>notification["error"]({message:"Impossible to create quizz"}))
     }

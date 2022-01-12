@@ -10,6 +10,7 @@ import RoundButton from "../../../components/RoundButton";
 import ShowQuestion from "../../../components/ShowQuestion";
 import ComputeScore from "../../../components/ComputeScore";
 import QRCode from 'qrcode.react';
+import getBaseFront from "../../../services/httpHelper";
 
 const getInitStatus = (id,idGame,idSecure) => {
     if(id !=null){
@@ -51,7 +52,7 @@ export default function HostGame(){
         // eslint-disable-next-line
     },[])
 
-    const launchGame = ()=> createGame(id).then(g=>window.location.href = `/game/host/${g.id}/${g.secureId}`)
+    const launchGame = ()=> createGame(id).then(g=>window.location.href = `${getBaseFront()}/game/host/${g.id}/${g.secureId}`)
 
     const connectGame = ()=>{
         //Start SSE
@@ -123,7 +124,7 @@ export default function HostGame(){
         })
     }
 
-    const endGame = ()=> window.location.href='/';
+    const endGame = ()=> window.location.href=getBaseFront();
 
     const isEnded = ()=> currentQuestion  >= quizz.questions.length-1;
 
@@ -132,7 +133,7 @@ export default function HostGame(){
             <RoundButton title={"Lancer la partie"} action={launchGame}/>
         </div>)
     }
-    const url = `${window.location.origin}/player?game=${idGame}`
+    const url = `${window.location.origin}/${getBaseFront()}/player?game=${idGame}`
     switch(status){
         case 'summary':return summary()
         case 'connecting':return 'Connecting'

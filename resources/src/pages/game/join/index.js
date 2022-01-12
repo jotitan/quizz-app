@@ -4,6 +4,7 @@ import {Input, notification} from "antd";
 import RoundButton from "../../../components/RoundButton";
 import './join.css';
 import {useSearchParams} from "react-router-dom";
+import getBaseFront from "../../../services/httpHelper";
 
 export default function JoinGame(){
     const [query] = useSearchParams();
@@ -12,7 +13,7 @@ export default function JoinGame(){
     const {joinGame} = useContext(GameContext)
 
     const connect = ()=>joinGame(game,name)
-        .then(d=>window.location.href=`/player/play/${game}/${d.id}?name=${name}`)
+        .then(d=>window.location.href=`${getBaseFront()}/player/play/${game}/${d.id}?name=${name}`)
         .catch(e=>notification["error"]({message:'Impossible to connect',description:e}))
 
     return (

@@ -5,6 +5,7 @@ import {ThunderboltOutlined} from "@ant-design/icons";
 import './list.css';
 import RoundButton from "../../../components/RoundButton";
 import getBase from "../../../services/httpHelper";
+import getBaseFront from "../../../services/httpHelper";
 
 export default function ListQuizzes(){
     const [quizzes,setQuizzes] = useState([]);
@@ -23,12 +24,12 @@ export default function ListQuizzes(){
     }
 
     const showQuizz = quizz => {
-        return <Card title={<a href={`/quizz/${quizz.id}`}>{quizz.name} ({quizz.nb})</a>}
+        return <Card title={<a href={`${getBaseFront()}/quizz/${quizz.id}`}>{quizz.name} ({quizz.nb})</a>}
                      key={`div_${quizz.id}`}
                      headStyle={{height:40}}
                      className={`quizz-card ${quizz.img?'card-image':''}`}
                      extra={<Tooltip title={"Jouer"}>
-                         <ThunderboltOutlined className={"icon-action"} onClick={()=>window.location.href = `/game/host/${quizz.id}`}/>
+                         <ThunderboltOutlined className={"icon-action"} onClick={()=>window.location.href = `${getBaseFront()}/game/host/${quizz.id}`}/>
                      </Tooltip>}>
             <p style={getBackgroundStyle(quizz)} className={'description'}>
                <span>{quizz.description}</span>
@@ -40,6 +41,6 @@ export default function ListQuizzes(){
         <h1>Tous les quizz</h1>
         {quizzes.sort((a,b)=>a.name.localeCompare(b.name)).map(showQuizz)}
 
-        <RoundButton title={"Créer un quizz"} action={()=>window.location.href='/quizz/create'}/>
+        <RoundButton title={"Créer un quizz"} action={()=>window.location.href=`${getBaseFront()}/quizz/create`}/>
     </div>
 }

@@ -5,3 +5,10 @@ export default function getBase(){
     }
     return `${window.document.location.origin}/api`
 }
+
+export function getBaseFront(){
+    if(window.document.location.origin.indexOf("localhost")!==-1) {
+        return "";
+    }
+    return "/quizz_app";
+}
