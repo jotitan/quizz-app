@@ -42,7 +42,7 @@ function App() {
         <div>
             <QuizzContext.Provider value={quizzApi}>
             <GameContext.Provider value={gameApi}>
-                <Router basename={getBaseFront().replaceAll("/","")}>
+                <Router basename={getBaseFront()}>
                     <Routes>
                         <Route path="/"  element={<ListQuizzes/>}/>
                         <Route path="/quizz/create" element={<CreateQuizz/>}/>
