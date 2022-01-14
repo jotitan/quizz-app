@@ -1,4 +1,4 @@
-import getBase from './httpHelper'
+import {getBase} from './httpHelper'
 
 function createGame(id){
     return fetch(`${getBase()}/game/create/${id}`,{method:'POST'}).then(d=>d.json())
