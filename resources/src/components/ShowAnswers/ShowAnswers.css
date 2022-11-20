@@ -12,3 +12,7 @@
     border:solid 2px gray;
     border-radius:15px;
 }
+
+.answers svg {
+    font-size: 8vh;
+}

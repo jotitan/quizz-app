@@ -3,7 +3,8 @@
 }
 
 body #root,body {
-  background-color: #c7e2ff !important;
+  /*background-color: #c7e2ff !important;*/
+  background-color: white !important;
 }
 
 .App-logo {

@@ -30,6 +30,7 @@ export default function HostGame(){
     const [status,setStatus] = useState('waiting')
     const {createGame,connectMasterGame, startGame, nextQuestion,getQuizzFromGame,endQuestion} = useContext(GameContext)
     const {getQuizz} = useContext(QuizzContext)
+    const [totalPlayers,setTotalPlayers] = useState(0)
     const [question,setQuestion] = useState({})
     const [quizz,setQuizz] = useState({})
     const [users,setUsers] = useState([]);
@@ -67,6 +68,7 @@ export default function HostGame(){
                 case "answer":
                     setQuestion(data.question)
                     setUsers(data.users)
+                    setTotalPlayers(data.total_players)
                     setStatus('waiting_answers')
                     break;
                 case "compute_score":
@@ -89,6 +91,7 @@ export default function HostGame(){
                 }
                 let copy = [...u]
                 copy.push(data.player);
+                setTotalPlayers(copy.length)
                 return copy;
             });
         })
@@ -97,6 +100,9 @@ export default function HostGame(){
         })
         sse.addEventListener("answer",event=>{
             let data = JSON.parse(event.data);
+            if(data.total_players != null) {
+                setTotalPlayers(data.total_players)
+            }
             setUsers(u=>{
                 let copy = [...u]
                 copy.push(data.player);
@@ -133,7 +139,8 @@ export default function HostGame(){
             <RoundButton title={"Lancer la partie"} action={launchGame}/>
         </div>)
     }
-    const url = `${window.location.origin}/${getBaseFront()}/player?game=${idGame}`
+    const url = `${window.location.origin}${getBaseFront()}/player?game=${idGame}`
+
     switch(status){
         case 'summary':return summary()
         case 'connecting':return 'Connecting'
@@ -158,7 +165,7 @@ export default function HostGame(){
                     <RoundButton title={"Retour accueil"} action={endGame}/>:
                     <RoundButton title={"Question suivante"} action={goNextQuestion}/>}
             </div>
-        case 'waiting_answers':return <ShowQuestion question={question} total={quizz.questions.length} users={users} isEndQuestion={isEndQuestion} doEndQuestion={doEndQuestion}/>
+        case 'waiting_answers':return <ShowQuestion question={question} total={quizz.questions.length} users={users} totalUsers={totalPlayers} isEndQuestion={isEndQuestion} doEndQuestion={doEndQuestion}/>
         default :return ''
     }
 }

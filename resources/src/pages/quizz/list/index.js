@@ -22,14 +22,19 @@ export default function ListQuizzes(){
         }:{backgroundImage: 'red'}
     }
 
+    const computeExtra = quizz => {
+        return quizz.nb > 0 ?
+        <Tooltip title={"Jouer"}>
+            <ThunderboltOutlined className={"icon-action"} onClick={()=>window.location.href = `${getBaseFront()}/game/host/${quizz.id}`}/>
+        </Tooltip> :''
+    }
+
     const showQuizz = quizz => {
         return <Card title={<a href={`${getBaseFront()}/quizz/${quizz.id}`}>{quizz.name} ({quizz.nb})</a>}
                      key={`div_${quizz.id}`}
                      headStyle={{height:40}}
                      className={`quizz-card ${quizz.img?'card-image':''}`}
-                     extra={<Tooltip title={"Jouer"}>
-                         <ThunderboltOutlined className={"icon-action"} onClick={()=>window.location.href = `${getBaseFront()}/game/host/${quizz.id}`}/>
-                     </Tooltip>}>
+                     extra={computeExtra(quizz)}>
             <p style={getBackgroundStyle(quizz)} className={'description'}>
                <span>{quizz.description}</span>
             </p>

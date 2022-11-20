@@ -8,7 +8,7 @@ import {useParams} from "react-router-dom";
 
 const icons = [<GithubOutlined />,<GitlabOutlined />,<CodepenCircleOutlined />,<QqOutlined />]
 
-export default function ShowQuestion({question,total,users, isEndQuestion=false,doEndQuestion}){
+export default function ShowQuestion({question,total,totalUsers, users, isEndQuestion=false,doEndQuestion}){
     const secureId = useParams().id_secure;
     const gameId = useParams().id_game;
     const [showButton,setShowButton] = useState(false);
@@ -37,7 +37,7 @@ export default function ShowQuestion({question,total,users, isEndQuestion=false,
                     <span className={'title-question'}>Question n°{question.position+1} / {total}</span>
                 </Col>
                 <Col span={6} style={{right:20,textAlign:'right'}} className={'title-question'}>
-                    <TeamOutlined /> {users.length} / {total}
+                    <TeamOutlined /> {users.length} / {totalUsers}
                 </Col>
             </Row>
 

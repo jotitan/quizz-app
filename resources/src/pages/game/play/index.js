@@ -72,8 +72,8 @@ export default function PlayGame(){
         }
         return <div>
             <Row style={{borderBottom:'solid 1px gray',padding:'10px 0px',fontVariant:'small-caps'}}>
-                <Col span={12} style={{textAlign:'center'}}>Score : {score.score}</Col>
-                <Col span={12} style={{textAlign:'center'}}>Place : {score.rank+1}</Col>
+                <Col span={12} style={{textAlign:'center'}}>Score : <b>{score.score}</b></Col>
+                <Col span={12} style={{textAlign:'center'}}>Place : <b>{score.rank+1}</b></Col>
             </Row>
         </div>
     }

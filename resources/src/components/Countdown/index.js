@@ -27,8 +27,8 @@ export default function Countdown({duration,endAction=()=>{},style}){
     return <Progress style={style}
             format={()=><span style={{fontWeight:leftTime<=5?'bold':'normal'}}>{Math.round(leftTime)}"</span>}
               strokeColor={{
-                  from: '#4dffd0',
-                  to: '#2d31ff',
+                  from: '#FFC800',
+                  to: '#F46036',
               }}
               strokeWidth={28}
               percent={percent}

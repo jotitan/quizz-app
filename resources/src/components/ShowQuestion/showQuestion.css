@@ -51,21 +51,29 @@
 
 .answer svg {
     margin-right:15px;
+    font-size: 8vh;
 }
 
 .color0 {
-    background:linear-gradient(to right, rgb(135,220,90) 0%,rgb(254,254,254) 50%,rgb(135,220,90) 100%);
+    /*background:linear-gradient(to right, rgb(135,220,90) 0%,rgb(254,254,254) 50%,rgb(135,220,90) 100%);*/
+    background-color:#FFC800;
+    color:black;
 }
 
 .color1 {
-    /*background:linear-gradient(to right, rgb(202,116,221) 0%, #d5c6dd 50%,rgb(202,116,221) 100%);*/
-    background:linear-gradient(to right, rgb(202,116,221) 0%,rgb(254,254,254) 50%,rgb(202,116,221) 100%);
+    /*background:linear-gradient(to right, rgb(202,116,221) 0%,rgb(254,254,254) 50%,rgb(202,116,221) 100%);*/
+    background-color:#086375;
+    color:white;
 }
 
 .color2 {
-    background:linear-gradient(to right, rgb(55,132,214) 0%,rgb(254,254,254) 50%,rgb(55,132,214) 100%);
+    /*background:linear-gradient(to right, rgb(55,132,214) 0%,rgb(254,254,254) 50%,rgb(55,132,214) 100%);*/
+    background-color:#F46036;
+    color:white;
 }
 
 .color3 {
-    background:linear-gradient(to right, rgb(229,17,21) 0%,rgb(254,254,254) 50%,rgb(229,17,21) 100%);
+    /*background:linear-gradient(to right, rgb(229,17,21) 0%,rgb(254,254,254) 50%,rgb(229,17,21) 100%);*/
+    background-color:#14591D;
+    color:white;
 }
