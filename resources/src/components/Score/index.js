@@ -26,12 +26,12 @@ export default function Score({id,sid,isEnded}){
                 {top3.map((s,rank)=>
                     <div key={`score_${s.player}`} className={'score-player top3'}>
                         <span className={`rank ${isEnded && rank === 0?'winner':''}`}>{rank+1}</span> -
-                        <span className={isEnded && rank === 0?'winner':''}>{s.player}</span> : {s.score}
+                        <span className={isEnded && rank === 0?'winner':''}>{s.player}</span> : {s.score.Score} ({s.score.TimeScore})
                     </div>)}
                 </div>
                 {scores.filter((_,i)=>i>=lengthTop3 && i < 20).map((s,rank)=>
                     <div key={`score_${s.player}`} className={'score-player'}>
-                        <span className={'rank'}>{rank+1+lengthTop3}</span> - {s.player} : {s.score}
+                        <span className={'rank'}>{rank+1+lengthTop3}</span> - {s.player} : {s.score.Score} ({s.score.TimeScore})
                     </div>)}
             </div>
         </div>
