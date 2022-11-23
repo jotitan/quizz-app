@@ -17,14 +17,15 @@ type Game struct {
 	// SecureId to connect master
 	SecureId string
 	// Players
-	players           []*Player
-	byNames           map[string]*Player
-	byIds             map[string]*Player
-	currentAnswers    playerAnswers
-	currentQuestion   int
-	isStart           bool
-	canAnswer         bool
-	masterCommunicate *sse.SSECommunicate
+	players            []*Player
+	byNames            map[string]*Player
+	byIds              map[string]*Player
+	currentAnswers     playerAnswers
+	currentQuestion    int
+	isStart            bool
+	canAnswer          bool
+	masterCommunicate  *sse.SSECommunicate
+	computeScoreByTime bool
 }
 
 type playerAnswers struct {
@@ -139,7 +140,8 @@ func (g *Game) ConnectPlayer(name string, communicate *sse.SSECommunicate) {
 func (g *Game) SendScoreToPlayer(isFinish bool) {
 	for _, player := range g.players {
 		if player.connected {
-			payload := fmt.Sprintf("{\"rank\":%d,\"score\":%d,\"fine\":%d,\"end\":%t}", player.rank, player.score, player.fineScore, isFinish)
+			score, rank := g.GetPlayerScore(player.Login)
+			payload := fmt.Sprintf("{\"rank\":%d,\"score\":%d,\"end\":%t}", rank, score, isFinish)
 			player.messages <- sse.Message{Event: "score", Payload: payload}
 		}
 	}
@@ -252,8 +254,15 @@ func (g *Game) ComputeScore() ScoreQuestion {
 	return results
 }
 
+func (g *Game) getRankCompute() func(a, b int) bool {
+	if g.computeScoreByTime {
+		return func(a, b int) bool { return g.players[a].fineScore > g.players[b].fineScore }
+	}
+	return func(a, b int) bool { return g.players[a].score > g.players[b].score }
+}
+
 func (g *Game) computePlayersRank() {
-	sort.Slice(g.players, func(a, b int) bool { return g.players[a].score > g.players[b].score })
+	sort.Slice(g.players, g.getRankCompute())
 	for i, player := range g.players {
 		player.rank = i
 	}
@@ -261,6 +270,9 @@ func (g *Game) computePlayersRank() {
 
 func (g *Game) GetPlayerScore(login string) (int, int) {
 	if player, exist := g.byNames[login]; exist {
+		if g.computeScoreByTime {
+			return player.fineScore, player.rank
+		}
 		return player.score, player.rank
 	}
 	return 0, 0
@@ -269,22 +281,30 @@ func (g *Game) GetPlayerScore(login string) (int, int) {
 func (g *Game) GetScore() map[string]RecapScore {
 	scores := make(map[string]RecapScore)
 	for _, player := range g.players {
-		scores[player.Login] = RecapScore{player.score, player.fineScore}
+		scores[player.Login] = g.getRecapScore(*player)
 	}
 	return scores
 }
 
-func NewGame(quizz Quizz, uniqueId, secureId string) *Game {
+func (g *Game) getRecapScore(p Player) RecapScore {
+	if g.computeScoreByTime {
+		return RecapScore{p.fineScore, p.score}
+	}
+	return RecapScore{p.score, p.fineScore}
+}
+
+func NewGame(quizz Quizz, uniqueId, secureId string, scoreWithTime bool) *Game {
 	return &Game{
-		Quizz:           quizz,
-		players:         make([]*Player, 0),
-		byNames:         make(map[string]*Player),
-		byIds:           make(map[string]*Player),
-		currentQuestion: 0,
-		isStart:         false,
-		Id:              uniqueId,
-		SecureId:        secureId,
-		canAnswer:       false,
+		Quizz:              quizz,
+		players:            make([]*Player, 0),
+		byNames:            make(map[string]*Player),
+		byIds:              make(map[string]*Player),
+		currentQuestion:    0,
+		isStart:            false,
+		Id:                 uniqueId,
+		SecureId:           secureId,
+		canAnswer:          false,
+		computeScoreByTime: scoreWithTime,
 	}
 }
 

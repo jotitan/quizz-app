@@ -55,12 +55,12 @@ func (ps GameService) Join(game *model.Game, name string) (string, error) {
 	return player.Id, nil
 }
 
-func (ps GameService) Create(quizzId string) (*model.Game, error) {
+func (ps GameService) Create(quizzId string, scoreWithTime bool) (*model.Game, error) {
 	quizz, err := ps.quizzService.Get(quizzId)
 	if err != nil {
 		return nil, err
 	}
-	game := model.NewGame(quizz, ps.generateUniqueId(), ps.generateId(12))
+	game := model.NewGame(quizz, ps.generateUniqueId(), ps.generateId(12), scoreWithTime)
 	ps.runningGames[game.Id] = game
 	return game, nil
 }

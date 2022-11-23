@@ -9,7 +9,7 @@ export default function Score({id,sid,isEnded}){
     const lengthTop3 = 3;
     const format = values => {
         let computeScore = Object.entries(values)
-            .sort((e1, e2) => e2[1] - e1[1])
+            .sort((e1, e2) => e2[1].Score - e1[1].Score)
             .map(e => {
                 return {player: e[0], score: e[1]}
             });

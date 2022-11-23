@@ -11,6 +11,7 @@ import ShowQuestion from "../../../components/ShowQuestion";
 import ComputeScore from "../../../components/ComputeScore";
 import QRCode from 'qrcode.react';
 import {getBaseFront} from "../../../services/httpHelper";
+import {Switch} from "antd";
 
 const getInitStatus = (id,idGame,idSecure) => {
     if(id !=null){
@@ -36,6 +37,7 @@ export default function HostGame(){
     const [users,setUsers] = useState([]);
     const [currentQuestion,setCurrentQuestion] = useState(-1);
     const [isEndQuestion,setIsEndQuestion] = useState(false);
+    const [speedGame,setSpeedGame] = useState(false);
 
     const getQuizzMethod = ()=>id != null ? ()=>getQuizz(id) : ()=>getQuizzFromGame(idGame,idSecure);
     const showScore = ()=> setStatus("score")
@@ -53,7 +55,7 @@ export default function HostGame(){
         // eslint-disable-next-line
     },[])
 
-    const launchGame = ()=> createGame(id).then(g=>window.location.href = `${getBaseFront()}/game/host/${g.id}/${g.secureId}`)
+    const launchGame = ()=> createGame(id, speedGame).then(g=>window.location.href = `${getBaseFront()}/game/host/${g.id}/${g.secureId}`)
 
     const connectGame = ()=>{
         //Start SSE
@@ -136,6 +138,7 @@ export default function HostGame(){
 
     const summary = ()=>{
         return (<div style={{textAlign:'center'}}><h1>Play game '{quizz.name}' ({quizz.questions.length})</h1>
+            <Switch onChange={setSpeedGame} /> Mode course
             <RoundButton title={"Lancer la partie"} action={launchGame}/>
         </div>)
     }

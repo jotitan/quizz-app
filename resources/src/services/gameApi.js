@@ -1,7 +1,7 @@
 import {getBase} from './httpHelper'
 
-function createGame(id){
-    return fetch(`${getBase()}/game/create/${id}`,{method:'POST'}).then(d=>d.json())
+function createGame(id, timeScore = false){
+    return fetch(`${getBase()}/game/create/${id}?time_score=${timeScore}`,{method:'POST'}).then(d=>d.json())
 }
 
 function connectMasterGame(id,secureId){
