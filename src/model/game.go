@@ -229,6 +229,23 @@ func (g *Game) SaveAnswerPlayer(idPlayer string, answer int) (bool, error) {
 	return nbAnswers >= len(g.players), nil
 }
 
+type Repartition struct {
+	Answer string `json:"answer"`
+	Nb     int    `json:"nb"`
+}
+
+func (g *Game) GetRepartitionWithAnswers() []Repartition {
+	answers := g.Quizz.Questions[g.currentQuestion-1].Answers
+	repartitions := make([]Repartition, len(answers))
+	for pos, answer := range answers {
+		repartitions[pos] = Repartition{Answer: answer.Text, Nb: 0}
+	}
+	for _, a := range g.currentAnswers.answers {
+		repartitions[a.answer].Nb++
+	}
+	return repartitions
+}
+
 func (g *Game) ForceEndAnswer() {
 	g.EndQuestion()
 }
@@ -247,6 +264,7 @@ func (g *Game) ComputeScore() ScoreQuestion {
 			results.Winners = append(results.Winners, g.increaseScore(playerId, restTime))
 		}
 	}
+	results.Repartition = g.GetRepartitionWithAnswers()
 	g.currentAnswers.reset()
 	g.computePlayersRank()
 	g.SendScoreToPlayer(len(g.Quizz.Questions) == g.currentQuestion)
@@ -309,8 +327,10 @@ func NewGame(quizz Quizz, uniqueId, secureId string, scoreWithTime bool) *Game {
 }
 
 type ScoreQuestion struct {
-	Winners     []string `json:"winners"`
-	GoodAnswers []string `json:"good"`
+	Winners          []string       `json:"winners"`
+	GoodAnswers      []string       `json:"good"`
+	Repartition      []Repartition  `json:"repartition"`
+	RepartitionAsMap map[string]int `json:"repartition_map"`
 }
 
 type RecapScore struct {

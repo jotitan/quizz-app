@@ -7,6 +7,7 @@ export default React.createContext({
     connectMasterGame:notImplemented,
     startGame:notImplemented,
     getScore:notImplemented,
+    getAnswersRepartition:notImplemented,
     joinGame:notImplemented,
     connectPlayerGame:notImplemented,
     nextQuestion:notImplemented,

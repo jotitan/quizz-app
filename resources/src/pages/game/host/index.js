@@ -132,7 +132,7 @@ export default function HostGame(){
         })
     }
 
-    const endGame = ()=> window.location.href=getBaseFront();
+    const endGame = ()=> window.location.href=`${getBaseFront()}/`;
 
     const isEnded = ()=> currentQuestion  >= quizz.questions.length-1;
 

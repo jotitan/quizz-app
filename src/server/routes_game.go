@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quizz-app/logger"
 	"github.com/quizz-app/model"
 	"net/http"
 	"strconv"
@@ -148,7 +147,6 @@ func createGame(c *gin.Context) {
 	if game, err := gameService.Create(quizzId, scoreWithTime); err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 	} else {
-		logger.GetLogger2().Info("EditGame", quizzId, "created", game)
 		c.JSON(http.StatusOK, gin.H{"id": game.Id, "secureId": game.SecureId})
 	}
 }

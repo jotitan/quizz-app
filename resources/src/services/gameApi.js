@@ -16,6 +16,10 @@ function getScore(id,secureId){
     return fetch(`${getBase()}/game/${id}/score/${secureId}`).then(d=>d.json())
 }
 
+function getAnswersRepartition(id,secureId){
+    return fetch(`${getBase()}/game/${id}/repartition/${secureId}`).then(d=>d.json())
+}
+
 function joinGame(id,name){
     if(id === '' || name === ''){
         return Promise.reject("Need to specify game and name to connect")
@@ -59,6 +63,7 @@ const gameApi = {
     startGame,
     connectMasterGame,
     getScore,
+    getAnswersRepartition,
     joinGame,
     connectPlayerGame,
     nextQuestion,

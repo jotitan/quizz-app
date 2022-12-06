@@ -14,5 +14,7 @@
     border:dashed 1px grey;
     background-color:lightskyblue;
     margin-left:20px;
+    margin-bottom:10px;
+    display:inline-block;
     font-size:24px;
 }

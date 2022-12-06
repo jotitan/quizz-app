@@ -20,6 +20,7 @@ function App() {
         startGame:GameApi.startGame,
         connectMasterGame:GameApi.connectMasterGame,
         getScore:GameApi.getScore,
+        getAnswersRepartition:GameApi.getAnswersRepartition,
         joinGame:GameApi.joinGame,
         connectPlayerGame:GameApi.connectPlayerGame,
         nextQuestion:GameApi.nextQuestion,

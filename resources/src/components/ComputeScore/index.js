@@ -1,13 +1,16 @@
 import React,{useContext, useEffect, useState} from "react";
 import GameContext from "../../context/GameContext";
 import './ComputeScore.css';
+import ChartResults from "../ChartResults";
 
 export default function ComputeScore({gameId,secureId}){
     const {computeScores} = useContext(GameContext)
-    const [scoreQuestion,setScoreQuestion] = useState({winners:[],good:[]})
+    const [scoreQuestion,setScoreQuestion] = useState({winners:[],good:[],repartition:[]})
 
     useEffect(()=>{
-        computeScores(gameId,secureId).then(setScoreQuestion)
+        computeScores(gameId,secureId).then(scores => {
+            setScoreQuestion(scores)
+        })
         // eslint-disable-next-line
     },[])
 
@@ -40,6 +43,9 @@ export default function ComputeScore({gameId,secureId}){
         </div>
         <div style={{textAlign:'center',marginTop:30,fontSize:18}}>
             {showPlayers(scoreQuestion.winners)}
+        </div>
+        <div>
+            <ChartResults data={scoreQuestion.repartition} answers={scoreQuestion.good}/>
         </div>
 
     </div>
