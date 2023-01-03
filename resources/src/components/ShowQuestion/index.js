@@ -12,6 +12,7 @@ export default function ShowQuestion({question,total,totalUsers, users, isEndQue
     const secureId = useParams().id_secure;
     const gameId = useParams().id_game;
     const [showButton,setShowButton] = useState(false);
+    const [forceStopMusic,setForceStopMusic] = useState(false);
 
     const showAnswer = (answer,pos)=>{
         return <div key={pos} className={'answer'}>
@@ -27,6 +28,11 @@ export default function ShowQuestion({question,total,totalUsers, users, isEndQue
             setShowButton(true)
         }
     },[isEndQuestion])
+
+    const endQuestion = () => {
+        setForceStopMusic(true);
+        doEndQuestion();
+    }
 
     const showNextButton = ()=>setShowButton(true);
 
@@ -47,7 +53,7 @@ export default function ShowQuestion({question,total,totalUsers, users, isEndQue
                 <div><p>{question.title}</p></div>
             </div>
             {question.filename !=='' ?<div style={{width:'calc(45vw - 15px)',display:'inline-block'}}>
-                    <ReadMusic question={question} secureId={secureId} gameId={gameId}/>
+                    <ReadMusic question={question} secureId={secureId} gameId={gameId} forceStop={forceStopMusic}/>
             </div>:''}
         </Space>
         <div style={{height:'50vh'}}>
@@ -56,7 +62,7 @@ export default function ShowQuestion({question,total,totalUsers, users, isEndQue
         <div style={{height:'60px'}}>
             <Countdown duration={question.time} style={{display:'inline-block',width:'80%',paddingLeft:20,paddingTop:16}} endAction={showNextButton}/>
             <div style={{display:'inline-block',float:'right',paddingTop:10,paddingRight:20}}>
-                <Button disabled={!showButton} type={"primary"} onClick={doEndQuestion}>Suite</Button>
+                <Button disabled={!showButton} type={"primary"} onClick={endQuestion}>Suite</Button>
             </div>
         </div>
     </div>

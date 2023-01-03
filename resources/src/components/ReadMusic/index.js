@@ -4,17 +4,27 @@ import {Tooltip} from "antd";
 import GameContext from "../../context/GameContext";
 
 
-export default function ReadMusic({gameId,secureId,question}){
+export default function ReadMusic({gameId, secureId, question, forceStop = false}) {
     const {getMusic} = useContext(GameContext);
-    const [source,setSource] = useState();
-    const [buffer,setBuffer] = useState();
-    const [playing,setPlaying] = useState(false);
+    const [source, setSource] = useState();
+    const [buffer, setBuffer] = useState();
+    const [playing, setPlaying] = useState(false);
 
-    const play = ()=> {
-        if(playing){
-            source.stop();
-            setPlaying(false);
-            return
+    useEffect(() => {
+        if (forceStop) {
+            stop();
+        }
+        // eslint-disable-next-line
+    }, [forceStop])
+
+    const stop = () => {
+        source.stop();
+        setPlaying(false);
+    }
+
+    const play = () => {
+        if (playing) {
+            return stop();
         }
         const ac = new AudioContext();
         const src = ac.createBufferSource();
@@ -25,22 +35,22 @@ export default function ReadMusic({gameId,secureId,question}){
         setPlaying(true);
     }
 
-    const load = ()=> {
-        getMusic(gameId,secureId,question.id).then(music=> {
+    const load = () => {
+        getMusic(gameId, secureId, question.id).then(music => {
             new AudioContext().decodeAudioData(music).then(setBuffer);
         });
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         load()
         // eslint-disable-next-line
-    },[]);
+    }, []);
 
 
     return <div>
         <Tooltip title={"Lecture"}>
-            {playing?<SoundTwoTone  style={{fontSize:30,cursor:"pointer"}} onClick={play}/>:
-                <SoundOutlined style={{fontSize:30,cursor:"pointer"}} onClick={play}/>}
+            {playing ? <SoundTwoTone style={{fontSize: 30, cursor: "pointer"}} onClick={play}/> :
+                <SoundOutlined style={{fontSize: 30, cursor: "pointer"}} onClick={play}/>}
         </Tooltip>
     </div>
 }
