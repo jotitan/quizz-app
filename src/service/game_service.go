@@ -28,7 +28,7 @@ func (ps GameService) GetByIdAndCheck(gameId, secureID string) (*model.Game, err
 		return nil, err
 	}
 	if !strings.EqualFold(game.SecureId, secureID) {
-		return nil, errors.New("no access to this game")
+		return nil, errors.New("no noaccess to this game")
 	}
 	return game, nil
 }

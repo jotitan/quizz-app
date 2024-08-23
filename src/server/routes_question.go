@@ -12,60 +12,60 @@ import (
 
 func createQuestionRoutes(server *gin.Engine) {
 	server.GET("/api/quizz/:id/question/:question", addCors(getQuestionDetail))
-	server.POST("/api/quizz/:id/question", addCors(createOrUpdateQuestion))
-	server.DELETE("/api/quizz/:id/question/:question", addCors(deleteQuestion))
+	server.POST("/api/quizz/:id/question", IsAdmin(), addCors(createOrUpdateQuestion))
+	server.DELETE("/api/quizz/:id/question/:question", IsAdmin(), addCors(deleteQuestion))
 	server.OPTIONS("/api/quizz/:id/question/:question", addCors(empty))
 }
 
-func getQuestionDetail(c *gin.Context){
+func getQuestionDetail(c *gin.Context) {
 	logger.GetLogger2().Info("Get question detail")
 }
 
-func empty(c *gin.Context){}
+func empty(c *gin.Context) {}
 
-func deleteQuestion(c *gin.Context){
+func deleteQuestion(c *gin.Context) {
 	logger.GetLogger2().Info("delete question")
-	quizz,err := quizzService.Get(c.Param("id"))
+	quizz, err := quizzService.Get(c.Param("id"))
 	if err != nil {
-		c.String(http.StatusNotFound,"No quizz with id")
+		c.String(http.StatusNotFound, "No quizz with id")
 		return
 	}
-	quizzService.DeleteQuestion(quizz,c.Param("question"))
+	quizzService.DeleteQuestion(quizz, c.Param("question"))
 }
 
 // return temp path
-func copyTemp(input io.Reader)(string,error){
-	f,err := os.CreateTemp("","temp_music_mp3")
+func copyTemp(input io.Reader) (string, error) {
+	f, err := os.CreateTemp("", "temp_music_mp3")
 	if err != nil {
-		return "",err
+		return "", err
 	}
 	defer f.Close()
-	_,err = io.Copy(f,input)
-	return f.Name(),err
+	_, err = io.Copy(f, input)
+	return f.Name(), err
 }
 
-func createOrUpdateQuestion(c *gin.Context){
+func createOrUpdateQuestion(c *gin.Context) {
 	logger.GetLogger2().Info("Create or update question")
 
 	q := service.QuestionDto{}
 	data := []byte(c.Request.FormValue("question"))
-	if err := json.Unmarshal(data,&q) ; err != nil {
-		c.String(http.StatusBadRequest,err.Error())
+	if err := json.Unmarshal(data, &q); err != nil {
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	file,header,err := c.Request.FormFile("music")
+	file, header, err := c.Request.FormFile("music")
 	// Extract music
 	if err == nil {
-		q.Music.Path,err = copyTemp(file)
+		q.Music.Path, err = copyTemp(file)
 		if err != nil {
-			c.String(http.StatusBadRequest,err.Error())
+			c.String(http.StatusBadRequest, err.Error())
 			return
 		}
 		q.Music.Filename = header.Filename
 	}
-	if err := quizzService.AddQuestion(c.Param("id"),q) ; err != nil {
-		c.String(http.StatusBadRequest,err.Error())
-	}else{
-		c.String(http.StatusOK,"")
+	if err := quizzService.AddQuestion(c.Param("id"), q); err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+	} else {
+		c.String(http.StatusOK, "")
 	}
 }

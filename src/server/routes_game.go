@@ -8,20 +8,23 @@ import (
 )
 
 func createGameRoutes(server *gin.Engine) {
-	api := server.Group("/api")
-	api.POST("/game/create/:quizz_id", addCors(createGame))
-	api.POST("/game/:game_id/start/:secure_id", addCors(startGame))
-	api.GET("/game/:game_id/connect/:secure_id", addCors(connect))
-	api.GET("/game/:game_id/quizz/:secure_id", addCors(getQuizzFromGame))
-	api.POST("/game/:game_id/playNextQuestion/:secure_id", addCors(playNextQuestion))
-	api.GET("/game/:game_id/music/:question/:secure_id", addCors(readMusic))
-	api.POST("/game/:game_id/forceEndQuestion/:secure_id", addCors(forceEndQuestion))
-	api.POST("/game/:game_id/computeScores/:secure_id", addCors(computeQuestionScore))
-	api.GET("/game/:game_id/score/:secure_id", addCors(getScore))
+	api := server.Group("/api/game")
+	api.Use(IsAdmin())
+	api.POST("/create/:quizz_id", addCors(createGame))
+	api.POST("/:game_id/start/:secure_id", addCors(startGame))
+	api.GET("/:game_id/connect/:secure_id", addCors(connect))
+	api.GET("/:game_id/quizz/:secure_id", addCors(getQuizzFromGame))
+	api.POST("/:game_id/playNextQuestion/:secure_id", addCors(playNextQuestion))
+	api.GET("/:game_id/music/:question/:secure_id", addCors(readMusic))
+	api.POST("/:game_id/forceEndQuestion/:secure_id", addCors(forceEndQuestion))
+	api.POST("/:game_id/computeScores/:secure_id", addCors(computeQuestionScore))
+	api.GET("/:game_id/score/:secure_id", addCors(getScore))
 
-	api.POST("/player/join/:id", addCors(joinGame))
-	api.GET("/player/connect/:id/:id_player", addCors(connectGame))
-	api.POST("/player/answer/:id/:id_player", addCors(answerQuestion))
+	apiClient := server.Group("/api/player")
+	apiClient.Use(isPlayer())
+	apiClient.POST("/join/:id", addCors(joinGame))
+	apiClient.GET("/connect/:id/:id_player", addCors(connectGame))
+	apiClient.POST("/answer/:id/:id_player", addCors(answerQuestion))
 }
 
 func joinGame(c *gin.Context) {
