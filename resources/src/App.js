@@ -53,7 +53,7 @@ function App() {
             setIsAdmin(details.is_admin)
             setLoading(false);
         })
-    },[])
+    },[setIsAdmin, userApi])
 
     function createSecureRoute(path, c){
         return  <Route path={path} element={isAdmin ? React.createElement(c):<NoAccess/>}/>;
