@@ -53,6 +53,7 @@ function App() {
             setIsAdmin(details.is_admin)
             setLoading(false);
         })
+        //eslint-disable-next-line
     },[setIsAdmin, userApi])
 
     function createSecureRoute(path, c){
