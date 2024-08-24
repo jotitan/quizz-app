@@ -54,7 +54,7 @@ function App() {
             setLoading(false);
         })
         //eslint-disable-next-line
-    },[setIsAdmin, userApi])
+    },[setIsAdmin])
 
     function createSecureRoute(path, c){
         return  <Route path={path} element={isAdmin ? React.createElement(c):<NoAccess/>}/>;
