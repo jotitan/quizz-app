@@ -7,6 +7,7 @@ import (
 	"github.com/golang-jwt/jwt"
 	"io"
 	"net/http"
+	"net/url"
 )
 
 type Security struct {
@@ -23,7 +24,7 @@ func (s *Security) canPlay(tokenAsString string) bool {
 	if err != nil {
 		return false
 	}
-	if isAdmin, exist := token.Claims.(jwt.MapClaims)["is_admin"]; !exist || isAdmin != true {
+	if isAdmin, exist := token.Claims.(jwt.MapClaims)["admin_quizz_app"]; !exist || isAdmin != true {
 		if isGuest, exist := token.Claims.(jwt.MapClaims)["guest"]; !exist || isGuest != true {
 			return false
 		}
@@ -36,7 +37,7 @@ func (s *Security) checkAdmin(tokenAsString string) bool {
 	if err != nil {
 		return false
 	}
-	if isAdmin, exist := token.Claims.(jwt.MapClaims)["is_admin"]; !exist || isAdmin != true {
+	if isAdmin, exist := token.Claims.(jwt.MapClaims)["admin_quizz_app"]; !exist || isAdmin != true {
 		return false
 	}
 	return true
@@ -66,7 +67,7 @@ func (s *Security) findPublicKey(kid string) (*rsa.PublicKey, error) {
 }
 
 func (s *Security) getPublicKey(kid string) (*rsa.PublicKey, error) {
-	resp, err := http.Get(fmt.Sprintf("%s?kid=%s", s.urlGetPublicKey, kid))
+	resp, err := http.Get(fmt.Sprintf("%s?kid=%s", s.urlGetPublicKey, url.QueryEscape(kid)))
 	if err != nil {
 		return nil, err
 	}

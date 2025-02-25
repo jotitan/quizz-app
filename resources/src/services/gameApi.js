@@ -58,6 +58,12 @@ function getMusic(gameId,secureId,questionId){
     return fetch(`${getBase()}/game/${gameId}/music/${questionId}/${secureId}`).then(d=>d.arrayBuffer());
 }
 
+
+function getPlayerDetail(id, idPlayer){
+    return fetch(`${getBase()}/player/${id}/${idPlayer}`).then(d=>d.json())
+}
+
+
 const gameApi = {
     createGame,
     startGame,
@@ -72,6 +78,7 @@ const gameApi = {
     endQuestion,
     computeScores,
     getMusic,
+    getPlayerDetail,
 }
 
 export default gameApi;

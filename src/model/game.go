@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -18,6 +19,7 @@ type Game struct {
 	SecureId string
 	// Players
 	players            []*Player
+	counterPlayer      int32
 	byNames            map[string]*Player
 	byIds              map[string]*Player
 	currentAnswers     playerAnswers
@@ -74,13 +76,14 @@ type playerAnswer struct {
 }
 
 type Player struct {
-	Login     string
-	Id        string
-	score     int
-	fineScore int
-	rank      int
-	connected bool
-	messages  chan sse.Message
+	Login      string
+	Id         string
+	IdPosition int32
+	score      int
+	fineScore  int
+	rank       int
+	connected  bool
+	messages   chan sse.Message
 }
 
 func (g Game) IsPlayerExists(name string) bool {
@@ -116,12 +119,20 @@ func (g *Game) HasPlayerAnswered(login string) bool {
 	return g.currentAnswers.HasAnswered(login)
 }
 
-func (g Game) CheckPlayer(name, id string) bool {
+func (g Game) CheckPlayer(name, id string) (bool, int32) {
 	player, exist := g.byNames[name]
 	if !exist {
-		return false
+		return false, 0
 	}
-	return strings.EqualFold(player.Id, id)
+	return strings.EqualFold(player.Id, id), player.IdPosition
+}
+
+func (g Game) CheckPlayerById(id string) (bool, int32) {
+	player, exist := g.byIds[id]
+	if !exist {
+		return false, 0
+	}
+	return true, player.IdPosition
 }
 
 func (g Game) GetUsersNames() []string {
@@ -161,6 +172,7 @@ func (g *Game) SendMasterMessage(message sse.Message) {
 
 func (g *Game) AddPlayer(name, id string) *Player {
 	player := &Player{Login: name, Id: fmt.Sprintf("%s%d", id, len(g.players)+1), score: 0, fineScore: 0, connected: false}
+	player.IdPosition = atomic.AddInt32(&g.counterPlayer, 1)
 	g.players = append(g.players, player)
 	g.byNames[name] = player
 	g.byIds[player.Id] = player
@@ -250,7 +262,7 @@ func (g *Game) ForceEndAnswer() {
 	g.EndQuestion()
 }
 
-//ComputeScore return list of winners
+// ComputeScore return list of winners
 func (g *Game) ComputeScore() ScoreQuestion {
 	question := g.Quizz.Questions[g.currentQuestion-1]
 	good := question.GetGoodAnswers()

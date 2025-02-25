@@ -3,7 +3,7 @@ import {PageHeader} from "antd";
 import './Header.css';
 import {getBaseFront} from "../../services/httpHelper";
 
-const isHome = ()=> window.location.pathname === '/';
+const isHome = ()=> window.location.pathname === getBaseFront() + '/';
 
 const showHeader = ()=> {
     return window.location.pathname.indexOf("game/host") === -1
@@ -11,7 +11,6 @@ const showHeader = ()=> {
 }
 
 export default function Header({children}){
-
     return <div>
         {showHeader()?
             isHome() ? <PageHeader title={"Quizz app"} className="site-page-header"/>:

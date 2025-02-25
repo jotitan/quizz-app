@@ -8,9 +8,14 @@ export default function PlayGame(){
     let params = useParams();
     let [query] = useSearchParams();
     const [status,setStatus] = useState('connecting')
-    const {connectPlayerGame} = useContext(GameContext)
+    const {connectPlayerGame, getPlayerDetail} = useContext(GameContext)
     const [question,setQuestion] = useState({})
     const [score,setScore] = useState({rank:0,score:0});
+    const [position, setPosition] = useState(0);
+
+    const getPosition = () => {
+        getPlayerDetail(params.id_game, params.id_player).then(p=>setPosition(p.position))
+    }
 
     const createSSEConnection = ()=>{
         const sse = connectPlayerGame(params.id_game,params.id_player,query.get("name"));
@@ -52,6 +57,7 @@ export default function PlayGame(){
 
     useEffect(()=>{
         createSSEConnection()
+        getPosition()
         // eslint-disable-next-line
     },[])
 
@@ -72,8 +78,9 @@ export default function PlayGame(){
         }
         return <div>
             <Row style={{borderBottom:'solid 1px gray',padding:'10px 0px',fontVariant:'small-caps'}}>
-                <Col span={12} style={{textAlign:'center'}}>Score : <b>{score.score}</b></Col>
-                <Col span={12} style={{textAlign:'center'}}>Place : <b>{score.rank+1}</b></Col>
+                <Col span={8} style={{textAlign:'center'}}>Score : <b>{score.score}</b></Col>
+                <Col span={8} style={{textAlign:'center'}}><img alt="icon" style={{height:28}} src={`/icons/icon_${position < 10 ? '0':''}${position}.svg`}/></Col>
+                <Col span={8} style={{textAlign:'center'}}>Place : <b>{score.rank+1}</b></Col>
             </Row>
         </div>
     }

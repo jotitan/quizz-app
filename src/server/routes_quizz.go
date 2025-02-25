@@ -10,14 +10,15 @@ import (
 
 func createQuizzRoutes(server *gin.Engine) {
 	api := server.Group("/api")
-	api.GET("/quizz/:id", IsAdmin(), addCors(getQuizz))
-	api.GET("/quizz/:id/cover", addCors(getCover))
-	api.GET("/quizzes", IsAdmin(), addCors(getQuizzes))
-	api.GET("/quizz/:id/questions", addCors(getQuestionsOfQuizz))
-	api.POST("/quizz", IsAdmin(), addCors(createQuizz))
-	api.POST("/quizz/:id", IsAdmin(), addCors(updateQuizz))
-	api.DELETE("/quizz/:id", IsAdmin(), addCors(deleteQuizz))
-	api.OPTIONS("/quizz/:id", addCors(empty))
+	api.Use(addCorsUse())
+	api.GET("/quizz/:id", IsAdmin(), getQuizz)
+	api.GET("/quizz/:id/cover", getCover)
+	api.GET("/quizzes", IsAdmin(), getQuizzes)
+	api.GET("/quizz/:id/questions", getQuestionsOfQuizz)
+	api.POST("/quizz", IsAdmin(), createQuizz)
+	api.POST("/quizz/:id", IsAdmin(), updateQuizz)
+	api.DELETE("/quizz/:id", IsAdmin(), deleteQuizz)
+	api.OPTIONS("/quizz/:id", empty)
 }
 
 func getQuizzes(c *gin.Context) {

@@ -1,9 +1,8 @@
 import React, {useContext, useEffect, useState} from "react";
 import QuizzContext from "../../../context/QuizzContext";
 import {Card, Tooltip} from "antd";
-import {ThunderboltOutlined} from "@ant-design/icons";
+import {PlusCircleOutlined, ThunderboltOutlined} from "@ant-design/icons";
 import './list.css';
-import RoundButton from "../../../components/RoundButton";
 import {getBase, getBaseFront} from "../../../services/httpHelper";
 
 export default function ListQuizzes(){
@@ -42,9 +41,8 @@ export default function ListQuizzes(){
     }
 
     return <div>
-        <h1>Tous les quizz</h1>
+        <h1>Tous les quizz
+            <Tooltip title={"Créer un quizz"}><a href={`${getBaseFront()}/quizz/create`} style={{cursor:'pointer', marginLeft:15}}><PlusCircleOutlined /></a></Tooltip></h1>
         {quizzes.sort((a,b)=>a.name.localeCompare(b.name)).map(showQuizz)}
-
-        <RoundButton title={"Créer un quizz"} action={()=>window.location.href=`${getBaseFront()}/quizz/create`}/>
     </div>
 }

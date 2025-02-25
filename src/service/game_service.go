@@ -40,19 +40,19 @@ func (ps GameService) GetById(gameId string) (*model.Game, error) {
 	return nil, errors.New("game not found")
 }
 
-func (ps GameService) Join(game *model.Game, name string) (string, error) {
+func (ps GameService) Join(game *model.Game, name string) (string, int32, error) {
 	if game.IsStarted() {
-		return "", errors.New("game already started")
+		return "", 0, errors.New("game already started")
 	}
 	if strings.EqualFold("", name) {
-		return "", errors.New("must specify a real name")
+		return "", 0, errors.New("must specify a real name")
 	}
 	// Check if name already exist
 	if game.IsPlayerExists(name) {
-		return "", errors.New("player with name already exists")
+		return "", 0, errors.New("player with name already exists")
 	}
 	player := game.AddPlayer(name, ps.generateId(6))
-	return player.Id, nil
+	return player.Id, player.IdPosition, nil
 }
 
 func (ps GameService) Create(quizzId string, scoreWithTime bool) (*model.Game, error) {
@@ -65,14 +65,23 @@ func (ps GameService) Create(quizzId string, scoreWithTime bool) (*model.Game, e
 	return game, nil
 }
 
+func (ps GameService) DetailPlayer(game *model.Game, playerId string, c *gin.Context) (int32, error) {
+	playerExists, idPosition := game.CheckPlayerById(playerId)
+	if !playerExists {
+		return 0, errors.New("impossible to connect user")
+	}
+	return idPosition, nil
+}
+
 func (ps GameService) Connect(game *model.Game, playerId, playerName string, c *gin.Context) error {
-	if !game.CheckPlayer(playerName, playerId) {
+	playerExists, idPosition := game.CheckPlayer(playerName, playerId)
+	if !playerExists {
 		return errors.New("impossible to connect user")
 	}
 	sseCommunication := sse.NewSSECommunicate(c.Writer, playerId)
 	game.ConnectPlayer(playerName, sseCommunication)
 	if !game.IsStarted() {
-		game.SendMasterMessage(sse.Message{Event: "join", Payload: fmt.Sprintf("{\"player\":\"%s\"}", playerName)})
+		game.SendMasterMessage(sse.Message{Event: "join", Payload: fmt.Sprintf("{\"player\":\"%s\", \"position\":%d}", playerName, idPosition)})
 	}
 	// Let connexion open, blocking
 	sseCommunication.Chanel <- sse.Message{Event: "welcome", Payload: ps.definePlayerStatusGame(game, playerName)}

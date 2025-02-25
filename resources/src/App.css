@@ -66,3 +66,27 @@ body #root,body {
   font-size:24px;
   color:gray;
 }
+
+
+.classic-button {
+  padding:10px 20px;
+  background-color:lightgreen;
+  display:table;
+  color:blue;
+  border-radius: 10px;
+  border:solid 3px gray;
+  cursor:pointer;
+}
+
+.classic-button:hover {
+  background-color: lightblue;
+}
+
+.classic-button > span {
+  display:table-cell;
+  vertical-align: middle;
+  font-weight: bold;
+  font-variant: all-small-caps;
+  font-size:24px;
+  color:gray;
+}

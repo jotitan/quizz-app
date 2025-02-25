@@ -1,6 +1,12 @@
-.player {
-    padding:5px 20px;
-    border:dashed 1px grey;
-    background-color:lightskyblue;
-    margin-left:10px;
+
+.launch-game {
+    font-size:20px;
+    border-radius:20px;
+    background-color:lightgreen;
+    padding:5px 15px;
+    cursor:pointer;
+}
+
+.launch-game:hover {
+    background-color: #8cc8ff;
 }

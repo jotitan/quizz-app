@@ -94,12 +94,10 @@ func health(c *gin.Context) {
 	c.JSON(200, gin.H{"status": true})
 }
 
-func addCors(handler func(*gin.Context)) func(*gin.Context) {
+func addCorsUse() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Referrer-Policy", "no-referrer")
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, HEAD, OPTIONS")
-
-		handler(c)
 	}
 }

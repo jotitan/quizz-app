@@ -1,0 +1,14 @@
+.player {
+    padding:5px 25px;
+    border:dashed 1px grey;
+    background-color:lightskyblue;
+    margin-left:10px;
+    display:inline-block;
+    margin-top:15px;
+    font-size:2vw;
+    border-radius: 0.5vw;
+}
+
+.players {
+    padding:20px;
+}

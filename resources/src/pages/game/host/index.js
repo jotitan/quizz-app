@@ -23,6 +23,9 @@ const getInitStatus = (id,idGame,idSecure) => {
     return 'shame';
 }
 
+const testUsers = ["Robert","Marine","Roger","Philippe","Sandrine","Aline","Alice","Emma","Jeayon","Thomas","Henri","René","Florent","Fatima","Yohann","Brice","Jean-François", "Francis","Jean-Philippe','Laura","Diane","Pauline","Cécile","Céline"]
+    .map((u,i) => {return {player:u, position:i}})
+
 export default function HostGame(){
     let id = useParams().id;
     let idGame = useParams().id_game;
@@ -65,7 +68,7 @@ export default function HostGame(){
             switch(data.status){
                 case "waiting":
                     setStatus('waiting_players')
-                    setUsers(data.users)
+                    //setUsers(data.users)
                     break;
                 case "answer":
                     setQuestion(data.question)
@@ -88,11 +91,11 @@ export default function HostGame(){
 
             setUsers(u=>{
                 // Check if already exist in list
-                if(u.some(v=>v===data.player)){
+                if(u.some(v=>v.position===data.position)){
                     return u;
                 }
                 let copy = [...u]
-                copy.push(data.player);
+                copy.push({player:data.player, position:data.position});
                 setTotalPlayers(copy.length)
                 return copy;
             });
@@ -137,9 +140,13 @@ export default function HostGame(){
     const isEnded = ()=> currentQuestion  >= quizz.questions.length-1;
 
     const summary = ()=>{
-        return (<div style={{textAlign:'center'}}><h1>Play game '{quizz.name}' ({quizz.questions.length})</h1>
+        return (<div style={{textAlign:'center'}}>
+            <h1>Play game <b>{quizz.name}</b></h1>
+            <div> {quizz.questions.length} question(s)</div>
             <Switch onChange={setSpeedGame} /> Mode course
-            <RoundButton title={"Lancer la partie"} action={launchGame}/>
+            <div>
+                <button onClick={launchGame}>Lancer la partie</button>
+            </div>
         </div>)
     }
     const url = `${window.location.origin}${getBaseFront()}/player?game=${idGame}`
@@ -149,11 +156,14 @@ export default function HostGame(){
         case 'connecting':return 'Connecting'
         case 'waiting_players':return (
             <div>
-                <div style={{marginTop:20}}>
-                    Pour vous connecter à la partie : {url} avec le code : {idGame}
+                <div style={{textAlign:'center', width:'49%', display:'inline-block', marginTop:50, borderRight:"solid"}}>
+                    <QRCode value={url} level={'M'} fgColor={"#0034ad"} size={384}/>
                 </div>
-                <div style={{textAlign:'center',marginTop:50}}>
-                    <QRCode value={url} level={'M'} fgColor={"#0034ad"} size={256}/>
+                <div style={{textAlign:'center', width:'49%', display:'inline-block', verticalAlign:"top", paddingTop:20, marginTop:50}}>
+                    <h2>Se connecter</h2>
+                    <p>{url}</p>
+                    <p>Code : <b>{idGame}</b></p>
+                    <button onClick={start} className={"launch-game"}>Lancer la partie</button>
                 </div>
                 <ShowPlayers users={users} start={start}/>
             </div>)

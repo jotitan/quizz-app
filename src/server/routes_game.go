@@ -10,21 +10,24 @@ import (
 func createGameRoutes(server *gin.Engine) {
 	api := server.Group("/api/game")
 	api.Use(IsAdmin())
-	api.POST("/create/:quizz_id", addCors(createGame))
-	api.POST("/:game_id/start/:secure_id", addCors(startGame))
-	api.GET("/:game_id/connect/:secure_id", addCors(connect))
-	api.GET("/:game_id/quizz/:secure_id", addCors(getQuizzFromGame))
-	api.POST("/:game_id/playNextQuestion/:secure_id", addCors(playNextQuestion))
-	api.GET("/:game_id/music/:question/:secure_id", addCors(readMusic))
-	api.POST("/:game_id/forceEndQuestion/:secure_id", addCors(forceEndQuestion))
-	api.POST("/:game_id/computeScores/:secure_id", addCors(computeQuestionScore))
-	api.GET("/:game_id/score/:secure_id", addCors(getScore))
+	api.Use(addCorsUse())
+	api.POST("/create/:quizz_id", createGame)
+	api.POST("/:game_id/start/:secure_id", startGame)
+	api.GET("/:game_id/connect/:secure_id", connect)
+	api.GET("/:game_id/quizz/:secure_id", getQuizzFromGame)
+	api.POST("/:game_id/playNextQuestion/:secure_id", playNextQuestion)
+	api.GET("/:game_id/music/:question/:secure_id", readMusic)
+	api.POST("/:game_id/forceEndQuestion/:secure_id", forceEndQuestion)
+	api.POST("/:game_id/computeScores/:secure_id", computeQuestionScore)
+	api.GET("/:game_id/score/:secure_id", getScore)
 
 	apiClient := server.Group("/api/player")
 	apiClient.Use(isPlayer())
-	apiClient.POST("/join/:id", addCors(joinGame))
-	apiClient.GET("/connect/:id/:id_player", addCors(connectGame))
-	apiClient.POST("/answer/:id/:id_player", addCors(answerQuestion))
+	apiClient.Use(addCorsUse())
+	apiClient.POST("/join/:id", joinGame)
+	apiClient.GET("/connect/:id/:id_player", connectGame)
+	apiClient.GET("/:id/:id_player", detailPlayer)
+	apiClient.POST("/answer/:id/:id_player", answerQuestion)
 }
 
 func joinGame(c *gin.Context) {
@@ -33,12 +36,12 @@ func joinGame(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	id, err := gameService.Join(game, c.Query("name"))
+	id, idPosition, err := gameService.Join(game, c.Query("name"))
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"id": id})
+	c.JSON(http.StatusOK, gin.H{"id": id, "idPosition": idPosition})
 }
 
 // Create SSE connection from gameId,playerId and his name
@@ -52,6 +55,21 @@ func connectGame(c *gin.Context) {
 	}
 	if err := gameService.Connect(game, playerId, name, c); err != nil {
 		c.String(http.StatusNotFound, err.Error())
+	}
+}
+
+// Create SSE connection from gameId,playerId and his name
+func detailPlayer(c *gin.Context) {
+	playerId := c.Param("id_player")
+	game, err := gameService.GetById(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	if idPosition, err := gameService.DetailPlayer(game, playerId, c); err != nil {
+		c.String(http.StatusNotFound, err.Error())
+	} else {
+		c.JSON(http.StatusOK, gin.H{"position": idPosition})
 	}
 }
 

@@ -7,11 +7,11 @@ import (
 	"os"
 )
 
-func main(){
+func main() {
 	if len(os.Args) != 2 {
 		log.Fatal("Specify conf path as argument")
 	}
-	conf,err := config.ReadConfig(os.Args[1])
+	conf, err := config.ReadConfig(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}

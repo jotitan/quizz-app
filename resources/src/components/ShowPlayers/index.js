@@ -1,16 +1,23 @@
 import React from 'react';
 import {Badge, Divider} from "antd";
-import RoundButton from "../RoundButton";
+import "./showplayers.css";
 
 export default function ShowPlayers({users,start}){
+
+    const buildImage = i => {
+        return {backgroundImage:`url(/icons/icon_${i < 10 ? '0':''}${i}.svg)`,backgroundRepeat:'no-repeat',paddingLeft:'4vw',backgroundPositionX:5}
+    }
+
+    const showPlayer = p => <div key={`player_${p.player}_${p.position}`} className={"player"} style={buildImage(p.position)}>
+        {p.player}
+    </div>
 
     return <div>
         <Divider orientation={"left"}>
             Players - <Badge count={users.length} style={{ backgroundColor: '#1a5ec4' }}/>
         </Divider>
-        <div>
-            {users.map(u=><span key={`player_${u}`} className={"player"}>{u}</span>)}
+        <div className={"players"}>
+            {users.map(showPlayer)}
         </div>
-        <RoundButton title={"Démarrer"} action={start}/>
     </div>
 }

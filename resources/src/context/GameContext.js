@@ -16,4 +16,5 @@ export default React.createContext({
     endQuestion:notImplemented,
     computeScores:notImplemented,
     getMusic:notImplemented,
+    getPlayerDetail:notImplemented,
 })

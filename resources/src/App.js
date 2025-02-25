@@ -35,6 +35,7 @@ function App() {
         endQuestion: GameApi.endQuestion,
         computeScores: GameApi.computeScores,
         getMusic: GameApi.getMusic,
+        getPlayerDetail: GameApi.getPlayerDetail,
     }
     const quizzApi = {
         createOrUpdateQuizz: QuizzApi.createOrUpdateQuizz,

@@ -75,18 +75,14 @@ export default function ShowQuizz(){
     const isQuizzPlayable = () => quizz.questions != null && quizz.questions.length > 0
             && quizz.questions.every(q=>q.answers != null && q.answers.length > 1)
 
-    const showPlayButton = () => {
-        return isQuizzPlayable() ?
+    const showPlayButton = () => isQuizzPlayable() ?
             <RoundButton title={"Jouer"} action={()=>window.location.href=`${getBaseFront()}/game/host/${quizz.id}`}/>
         :''
-    }
 
-    const doDeleteQuizz = id => {
-        deleteQuizz(id).then(()=>{
+    const doDeleteQuizz = id => deleteQuizz(id).then(()=>{
             notification["success"]({message:"Quizz supprimé"})
             window.location.href=`${getBaseFront()}/`;
         })
-    }
 
     return (<div>
         <div style={{paddingLeft:50}}>
@@ -94,6 +90,7 @@ export default function ShowQuizz(){
                 <h1>
                     Quizz {quizz.name}
                     <EditOutlined onClick={()=>setShowEditQuizz(true)} style={{marginLeft:10,marginRight:10}}/>
+                    <!--ActionButton/-->
                     <Popconfirm okText={"Supprimer"} cancelText={"Annuler"} onConfirm={()=>doDeleteQuizz(quizz.id)} title={"Etes vous sur de vouloir supprimer ce quizz"}>
                         <Tooltip title={"Supprimer"}>
                             <DeleteOutlined/>

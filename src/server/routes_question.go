@@ -11,10 +11,10 @@ import (
 )
 
 func createQuestionRoutes(server *gin.Engine) {
-	server.GET("/api/quizz/:id/question/:question", addCors(getQuestionDetail))
-	server.POST("/api/quizz/:id/question", IsAdmin(), addCors(createOrUpdateQuestion))
-	server.DELETE("/api/quizz/:id/question/:question", IsAdmin(), addCors(deleteQuestion))
-	server.OPTIONS("/api/quizz/:id/question/:question", addCors(empty))
+	server.GET("/api/quizz/:id/question/:question", addCorsUse(), getQuestionDetail)
+	server.POST("/api/quizz/:id/question", addCorsUse(), IsAdmin(), createOrUpdateQuestion)
+	server.DELETE("/api/quizz/:id/question/:question", addCorsUse(), IsAdmin(), deleteQuestion)
+	server.OPTIONS("/api/quizz/:id/question/:question", addCorsUse(), empty)
 }
 
 func getQuestionDetail(c *gin.Context) {
