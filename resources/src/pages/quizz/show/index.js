@@ -90,7 +90,6 @@ export default function ShowQuizz(){
                 <h1>
                     Quizz {quizz.name}
                     <EditOutlined onClick={()=>setShowEditQuizz(true)} style={{marginLeft:10,marginRight:10}}/>
-                    <!--ActionButton/-->
                     <Popconfirm okText={"Supprimer"} cancelText={"Annuler"} onConfirm={()=>doDeleteQuizz(quizz.id)} title={"Etes vous sur de vouloir supprimer ce quizz"}>
                         <Tooltip title={"Supprimer"}>
                             <DeleteOutlined/>
