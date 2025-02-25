@@ -48,7 +48,7 @@ jobs:
         mv build.tar.gz ../artifacts
 
     # Upload artifact
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v4
       with:
         name: Artifacts quizz app
         path: artifacts
