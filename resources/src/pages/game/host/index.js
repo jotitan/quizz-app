@@ -23,8 +23,7 @@ const getInitStatus = (id,idGame,idSecure) => {
     return 'shame';
 }
 
-const testUsers = ["Robert","Marine","Roger","Philippe","Sandrine","Aline","Alice","Emma","Jeayon","Thomas","Henri","René","Florent","Fatima","Yohann","Brice","Jean-François", "Francis","Jean-Philippe','Laura","Diane","Pauline","Cécile","Céline"]
-    .map((u,i) => {return {player:u, position:i}})
+//const testUsers = ["Robert","Marine","Roger","Philippe","Sandrine","Aline","Alice","Emma","Jeayon","Thomas","Henri","René","Florent","Fatima","Yohann","Brice","Jean-François", "Francis","Jean-Philippe','Laura","Diane","Pauline","Cécile","Céline"].map((u,i) => {return {player:u, position:i}})
 
 export default function HostGame(){
     let id = useParams().id;
